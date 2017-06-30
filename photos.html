@@ -1,0 +1,95 @@
+<html>
+    <head>
+        
+        <title>View Photos</title>
+        <link rel="stylesheet" href="mpStyle.css" type="text/css">
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
+        
+        
+        <script>
+            
+            
+            $(document).ready(function() {
+                var root = 'https://jsonplaceholder.typicode.com';
+                
+           	    $("#posts").add(function(){
+                    
+                        for(var album=1; album<10; album++)
+                        $.ajax({
+                        url: root + '/photos/',
+						data: "albumId="+album,
+						type: "GET",
+                        dataType: "json",
+						success: function(data) {
+							
+                            $("#posts").append("<ul class='enlarge'><li><img src='"+ data[0].thumbnailUrl +"'/><span><img src='"+data[0].url+"'/>"+data[0].title+
+                                " - Album: " + data[0].albumId+"</span></li></ul>");
+                            
+						}
+                    
+                });
+                
+                var ctr=-1;
+                var ctr2=0;
+                    
+                $("#loadButton").click(function(){
+                    
+                    ctr++;
+                    ctr2++;
+                    
+                    for(var album=10; album<=100; album++)
+                    $.ajax({
+                    url: root + '/photos/',
+				    data: "albumId="+album,
+				    type: "GET",
+                    dataType: "json",
+				    success: function(data) {
+							
+                    $("#posts").append("<ul class='enlarge'><li><img src='"+ data[ctr].thumbnailUrl +"'/><span><img src='"+data[ctr].url+"'/><br/>"+data[ctr].title+" - Album: " + data[ctr].albumId+"</span></li></ul>");
+
+                            
+						}
+                    
+                });
+                    
+                    for(var albumNo=1; albumNo<10; albumNo++)
+                        $.ajax({
+                        url: root + '/photos/',
+						data: "albumId="+albumNo,
+						type: "GET",
+                        dataType: "json",
+						success: function(data) {
+							
+                        $("#posts").append("<ul class='enlarge'><li><img src='"+ data[ctr2].thumbnailUrl +"'/><span><img src='"+data[ctr2].url+"'/><br/>"+data[ctr2].title+" - Album: " + data[ctr2].albumId+"</span></li></ul>");
+                            
+						}
+                
+                
+            });
+                
+            });
+                
+            });
+                
+            });
+
+        </script>
+    
+    </head>
+    
+    <body>
+        <div id="heading"><a href="posts.html" id="goTo">Grunt </a>| Photos <a href="photos.html" id="goTo">| View All Photos </a> <a href="albums.html" id="goTo">| View All Albums </a>&nbsp;</div>
+        <div id="content">
+
+            <header>All photos</header>
+            
+            <div id="posts"></div>
+            
+            <button id="loadButton">Load more</button>
+
+            
+        </div>
+    </body>
+
+</html>

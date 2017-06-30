@@ -1,0 +1,111 @@
+<html>
+    <head>
+        
+        <title>Posts</title>
+        <link rel="stylesheet" href="mpStyle.css" type="text/css">
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
+        
+        
+        
+        <script>
+            
+            $(document).ready(function() {
+                
+                var root = 'https://jsonplaceholder.typicode.com';
+                var hold = 0; 
+                var num = 0;
+                var lval = false;
+                
+                    function loadPosts(){
+                        
+                        $.ajax({
+                            url: root + '/posts/',
+                            type: "GET",
+                            }).then(function(data) {
+                                var posts = data;
+                                
+                                $.ajax({
+                                url: root + '/users/',
+                                type: "GET",
+                                }).then(function(data1){
+                                    var users = data1;
+                                    
+                                    
+                                    for(var i=99; i>=90; i--)
+                                    {
+                                        if(posts[i].userId != 0)
+                                        {
+                                            //i = i + num;
+                                            
+                                            $("#posts").append("<div id='box'>" + "<label><a href = 'users.html#" + posts[i].userId + "' id='uName'>" + users[posts[i].userId - 1].username + "</a>" + "</label><hr><h3>" + posts[i].title + "</h3>" + "<p>" + posts[i].body + "</p></div>");
+                                            
+                                        }
+                                    }
+                                    
+                                });
+
+
+                            });
+                        
+                    }
+                
+
+                    loadPosts();
+                    var user = 99;
+                
+                    $("#loadButton").click(function(){
+                        
+                            user = user - 10;
+                        
+                            $.ajax({
+                            url: root + '/posts/',
+                            type: "GET",
+                            }).then(function(data) {
+                                var posts = data;
+                                
+                                $.ajax({
+                                url: root + '/users/',
+                                type: "GET",
+                                }).then(function(data1){
+                                    var users = data1;
+                                    
+                                    
+                                    for(var i=user; i>=user-9; i--)
+                                    {
+                                        if(posts[i].userId != 0)
+                                        {
+                                            i = i + num;
+                                            $("#posts").append("<div id='box'>" + "<label><a href = 'users.html#" + posts[i].userId + "' id='uName'>" + users[posts[i].userId - 1].username + "</a>" + "</label><hr><h3>" + posts[i].title + "</h3>" + "<p>" + posts[i].body + "</p></div>");
+                                            
+                                        }
+                                    }
+                                    
+                                });
+
+
+                            });
+                        
+                        });
+           	
+            });
+                //end of AJAX call
+
+        </script>
+    
+    </head>
+    
+    <body>
+        <div id="heading"><a href="posts.html" id="goTo">Grunt </a>| Posts <a href="photos.html" id="goTo">| View All Photos </a> <a href="albums.html" id="goTo">| View All Albums </a>&nbsp;</div>
+
+        <div id="content">
+            <center>
+            <div id="posts"></div>
+            <br/>
+            <button id="loadButton">Load more</button>
+            </center>
+            
+        </div>
+    </body>
+
+</html>

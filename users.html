@@ -1,0 +1,191 @@
+<html>
+    <head>
+        
+        <title>User Profile</title>
+        <link rel="stylesheet" href="mpStyle.css" type="text/css">
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
+        
+        
+        <script>
+            $(document).ready(function() {
+                var root = 'https://jsonplaceholder.typicode.com';
+                var idNum = window.location.hash.substring(1);
+                var albumNum = window.location.hash.substring(1);
+                
+                     $.ajax({
+						type: "GET",
+                        url: root + '/users/',
+                        dataType: "json",
+						success: function(data) {
+                            
+                            
+                            var users = data;
+                            
+                            $("#info").html("<header>" + users[idNum-1].name + "</header><hr>");
+                            console.log(data); 
+                            
+                            $("#info").append("<br/><b>@" + users[idNum-1].username + "</b>");
+                         
+                            $("#info").append("<p>" + "<b>ID: </b>"+ users[idNum-1].id + "</p>");
+                            console.log(data);      
+                            
+                            $("#info").append("<p>" + "<b>Email: </b>"+ users[idNum-1].email + "</p>");
+                            console.log(data);   
+                            
+                            $("#info").append("<p>" + "<b>Address</b>" + "</p>" + "<blockquote>" + "<b>Street: </b>"+ users[idNum-1].address.street + "</blockquote>");
+                            console.log(data);
+                            
+                            $("#info").append("<blockquote>" + "<b>Suite: </b>"+ users[idNum-1].address.suite + "</blockquote>");
+                            console.log(data);
+                            
+                            $("#info").append("<blockquote>" + "<b>City: </b>"+ users[idNum-1].address.city + "</blockquote>");
+                            console.log(data);
+                            
+                            $("#info").append("<blockquote>" + "<b>Zipcode: </b>"+ users[idNum-1].address.zipcode + "</blockquote>");
+                            console.log(data);
+                            
+                            $("#info").append("<p>" + "<b>Phone: </b>"+ users[idNum-1].phone + "</p>");
+                            console.log(data);  
+                            
+                            $("#info").append("<p>" + "<b>Website: </b>"+ users[idNum-1].website + "</p>");
+                            console.log(data);  
+                            
+                            $("#info").append("<p>" + "<b>Company</b>" + "</p>" + "<blockquote>" + "<b>Company Name: </b>"+ users[idNum-1].company.name + "</blockquote>");
+                            console.log(data);
+                            
+                            $("#info").append("<blockquote>" + "<b>Company Catch Phrase: </b>"+ users[idNum-1].company.catchPhrase + "</blockquote>");
+                            console.log(data);
+                            
+                            $("#info").append("<blockquote>" + "<b>Company BS: </b>"+ users[idNum-1].company.bs + "</blockquote>");
+                            console.log(data);
+                            
+                         }
+                
+                     });
+                    
+                
+                
+                    //photo albums
+                    $.ajax({
+                       
+                        url: root + '/albums/',
+                        data: "albumId="+albumNum,
+                        type: 'GET',
+                        dataType: "json",
+                        success: function(data){
+                            
+//                            var albums = data;
+                            
+                            $("#albums").append("<br><b>Latest Albums:</b>");
+                            
+                            for(var i=5; i<10; i++){
+                            $("#albums").append("<li>"+data[i].title +"</li>");
+                            }
+                            
+                        }
+                        
+                    });
+                
+                var loadedAlbums = false;
+                
+                $("#loadButton").click(function() {
+                    
+                    $.ajax({
+                       
+                        url: root + '/albums/',
+                        type: 'GET',
+                        dataType: "json",
+                        success: function(data){
+                            
+                            var albums = data;
+            
+                            if(loadedAlbums == false)
+                            {
+                                for(var i=0; i<5; i++)
+                                $("#albums").append("<li>"+albums[i].title +"</li>");
+                            
+                                loadedAlbums == true;
+                            }
+                        }
+                        
+                    });
+                });
+                
+                
+                //latest posts
+                $.ajax({
+                   
+                    url: root + '/posts/',
+                    data: "userId="+idNum,
+                    type: 'GET',
+                    dataType: "json",
+                    success: function(data){
+                        
+                        $("#rightBox2").append("<h4>Latest Posts:</h4>");
+                        
+                        for(var j=9; j>=5; j--)
+                        {
+                            $("#rightBox2").append("<h3>"+ data[j].title +"</h3>");
+                        
+                            $("#rightBox2").append("<p>" + data[j].body + "</p>"+"<br>");
+                        }
+                    }
+                    
+                });
+                
+                var loadedPosts = false;
+                
+                    $("#loadButton").click(function() {
+                     
+                     $.ajax({
+                   
+                        url: root + '/posts/',
+                        data: "userId="+idNum,
+                        type: 'GET',
+                        dataType: "json",
+                        success: function(data){
+                            if(loadedPosts == false)
+                            {
+                                for(var j=4; j>=0; j--)
+                                {
+                                    $("#rightBox2").append("<h3>"+ data[j].title +"</h3>");
+
+                                    $("#rightBox2").append("<p>" + data[j].body + "</p>"+"<br>");
+                                }
+                            loadedPosts = true;
+                            }
+
+                        }
+                     });
+                
+                    });
+                
+            });
+        
+        </script>
+        
+    
+    </head>
+    
+    <body>
+        <div id="heading"><a href="posts.html" id="goTo">Grunt </a>| User Profile <a href="photos.html" id="goTo">| View All Photos </a> <a href="albums.html" id="goTo">| View All Albums </a>&nbsp;</div>
+        
+        <div id="content">
+            
+            <div id="info" class="leftFloat"></div>
+
+            <div id="rightBox2" class="rightFloat">
+            <button id="loadButton">Load more</button>
+            </div>
+            
+            <div id="albums" class="leftFloat">
+            <button id="loadButton">Load more</button>
+            </div>
+            
+            
+        </div>
+        
+    </body>
+
+</html>
